@@ -3,10 +3,11 @@ package main
 import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
-	//"fyne.io/fyne/v2/widget"
+	"fyne.io/fyne/v2/widget"
     "fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2"
 	"image/color"
+	//"fmt"
 )
 
 func main() {
@@ -41,15 +42,45 @@ func main() {
 		}
 	}
 
-
+	//Properly size+position grid and add to window
 	grid.Resize(fyne.NewSize(1000,500))
-
 	content := container.NewWithoutLayout(grid)
-	grid.Move(fyne.NewPos(100,0))
+	grid.Move(fyne.NewPos(100,50))
+
+	//Create and position Play button
+	playBtn := widget.NewButton("Play", func(){
+		play()
+	} )
+	playBtn.Move(fyne.NewPos(300, 580))
+	playBtn.Resize(fyne.NewSize(150, 50))
+
+	//Create and position Stop button
+	stopBtn := widget.NewButton("Stop", func(){
+		stop()
+	} )
+	stopBtn.Move(fyne.NewPos(750, 580))
+	stopBtn.Resize(fyne.NewSize(150, 50))
+
+	//Add both buttons to window
+	content.Add(playBtn)
+	content.Add(stopBtn)
 
 	w.SetContent(content)
-
 	w.Resize(fyne.NewSize(1200,670))
 	w.ShowAndRun()	
+
+}
+
+
+func play() {
+	//yes
+
+}
+
+func stop() {
+
+}
+
+func reset() {
 
 }
