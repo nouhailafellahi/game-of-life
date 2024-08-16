@@ -9,12 +9,14 @@ import (
 	"fyne.io/fyne/v2"
 	"image/color"
 	"log"
+	"math"
 )
 
 //array of squares
 //value of 0 if empty
 //valye of 1 if colored
-var squares [25][50]int
+var squares [50][25]*canvas.Rectangle
+var fill[50][25]int
 
 //Struct and declaration of a clickable rectangle. Used as the background of grid
 type clickableRectangle struct {
@@ -41,6 +43,11 @@ func (r *clickableRectangle) Tapped(event *fyne.PointEvent) {
 	}
 }
 
+
+
+
+
+
 //Methods
 func play(grid *fyne.Container) {
 
@@ -57,7 +64,20 @@ func reset(grid *fyne.Container) {
 }
 
 func click(grid *fyne.Container, pos fyne.Position){
-	println("Position clicked: ", pos.X, pos.Y)//debug
+	xPos := (int(math.Floor(float64(int(pos.X))/20)))
+	yPos := (int(math.Floor(float64(int(pos.Y))/20)))
+	
+	println("Position clicked: ", xPos, yPos)//debug
+
+	if(fill[xPos][yPos] == 0) {
+		squares[xPos][yPos].FillColor = color.White
+		fill[xPos][yPos] = 1
+	} else {
+		squares[xPos][yPos].FillColor = color.Transparent
+		fill[xPos][yPos] = 0
+	}
+	grid.Refresh()
+		
 }
 
 
@@ -68,8 +88,19 @@ func main() {
 	a := app.New()
 	w := a.NewWindow("Conway's Game of Life")
 	
-
+	//contains grid lines and squares
 	grid := container.NewWithoutLayout()
+
+	//initialize array of squares
+	for i:=0;i<len(squares);i++ {
+		for j:=0;j<len(squares[i]);j++{
+			rect := canvas.NewRectangle(color.Transparent)
+			rect.Resize(fyne.NewSize(20,20))
+			rect.Move(fyne.NewPos(float32(i*20), float32(j*20)))
+			squares[i][j] = rect
+			grid.Add(squares[i][j])
+		}
+	}
 
 	//draw grid lines
 	for i := 0; i < 51; i++ {
@@ -109,6 +140,7 @@ func main() {
 	screen.Resize(fyne.NewSize(1000,500))
 	screen.rect.FillColor = color.RGBA{R:100,G:100,B:100,A:30}
 	
+	//Add grid and screen to the container and adjust positions
 	content := container.NewWithoutLayout(screen, grid)
 	grid.Move(fyne.NewPos(100,40))
 	screen.Move(fyne.NewPos(100,40))
