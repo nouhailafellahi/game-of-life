@@ -7,7 +7,6 @@ import (
     "fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2"
 	"image/color"
-	"fmt"
 )
 
 func main() {
@@ -17,19 +16,33 @@ func main() {
 
 	grid := container.NewWithoutLayout()
 
-	//draw horizontal lines
-	for i := 0; i < 20; i++ {
-		rect := canvas.NewRectangle(color.White)
+	//draw grid lines
+	for i := 0; i < 51; i++ {
+		//draw vertical lines
+		rect := canvas.NewRectangle(color.RGBA{R:255, G:255, B:255, A:100})
 
-		rect.Resize(fyne.NewSize(1000,1))
-		rect.FillColor = color.White;
-		rect.StrokeColor = color.White
+		rect.Resize(fyne.NewSize(1,500))
+		rect.FillColor = color.RGBA{R:255, G:255, B:255, A:100};
+		rect.StrokeColor = color.RGBA{R:255, G:255, B:255, A:100}
 
 		grid.Add(rect)
-		rect.Move(fyne.NewPos(0, float32(30*i)))
+		rect.Move(fyne.NewPos(float32(20*i), 0))
+
+		//add horizontal lines
+		if (i < 26) {
+			rect := canvas.NewRectangle(color.RGBA{R:255, G:255, B:255, A:100})
+
+			rect.Resize(fyne.NewSize(1000,1))
+			rect.FillColor = color.RGBA{R:255, G:255, B:255, A:100}
+			rect.StrokeColor = color.RGBA{R:255, G:255, B:255, A:100}
+
+			grid.Add(rect)
+			rect.Move(fyne.NewPos(0, float32(20*i)))
+		}
 	}
-	
-	grid.Resize(fyne.NewSize(1000,600))
+
+
+	grid.Resize(fyne.NewSize(1000,500))
 
 	content := container.NewWithoutLayout(grid)
 	grid.Move(fyne.NewPos(100,0))
