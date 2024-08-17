@@ -10,6 +10,7 @@ import (
 	"image/color"
 	"log"
 	"math"
+	"time"
 )
 
 //array of squares
@@ -18,6 +19,7 @@ import (
 var squares [50][25]*canvas.Rectangle
 var fill[50][25]int
 var neighbors[50][25]int
+var playing bool
 
 
 //Struct and declaration of a clickable rectangle. Used as the background of grid
@@ -49,12 +51,40 @@ func (r *clickableRectangle) Tapped(event *fyne.PointEvent) {
 
 //Methods
 func play(grid *fyne.Container) {
-	countNeighbors(grid)
+	if !playing {
+		playing = true
+		for playing {
+			countNeighbors()
+			for i:=0;i<len(squares);i++ {
+				for j:=0;j<len(squares[i]);j++{
+	
+					//decide wether to keep current status or click()
+					if(fill[i][j] == 0) {
+						//if the cell is dead and has exactly 3 alive neighbors, click() it
+						if(neighbors[i][j] == 3) {
+							//println("dead, will click")//debug
+							click(grid,i,j)
+						}
+					} else if (fill[i][j] == 1) {
+						//if the cell is alive and has neither 2 nor 3 alive neighbors, click() it
+						if(neighbors[i][j] != 2 && neighbors[i][j] != 3) {
+							//println("alive, will click")//debug
+							click(grid,i,j)
+						}
+					}
+				}
+			}
+			time.Sleep(2*time.Second)
+		}
+
+	}
+	
+		
 	
 }
 
 func stop(grid *fyne.Container) {
-
+	playing = false
 }
 
 func reset(grid *fyne.Container) {
@@ -73,7 +103,7 @@ func initNeighbors() {
 
 }
 
-func countNeighbors(grid *fyne.Container) {
+func countNeighbors() {
 	initNeighbors()
 	
 	//following loop counts the neighbors of each cell
@@ -100,23 +130,10 @@ func countNeighbors(grid *fyne.Container) {
 					}
 				}
 			}
-			println(neighbors[i][j])//debug
-			//decide wether to keep current status or click()
-			if(fill[i][j] == 0) {
-				//if the cell is dead and has exactly 3 alive neighbors, click() it
-				if(neighbors[i][j] == 3) {
-					println("dead, will click")//debug
-					click(grid,i,j)
-				}
-			} else if (fill[i][j] == 1) {
-				//if the cell is alive and has neither 2 nor 3 alive neighbors, click() it
-				if(neighbors[i][j] != 2 && neighbors[i][j] != 3) {
-					println("alive, will click")//debug
-					click(grid,i,j)
-				}
-			}
+			//println(neighbors[i][j])//debug
 		}
 	}
+			
 			
 }
 
@@ -135,6 +152,7 @@ func click(grid *fyne.Container, xPos int, yPos int){
 
 //Main
 func main() {
+	playing = true
 	println("Start build")//debug
 	a := app.New()
 	w := a.NewWindow("Conway's Game of Life")

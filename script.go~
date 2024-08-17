@@ -100,16 +100,18 @@ func countNeighbors(grid *fyne.Container) {
 					}
 				}
 			}
-
+			println(neighbors[i][j])//debug
 			//decide wether to keep current status or click()
 			if(fill[i][j] == 0) {
 				//if the cell is dead and has exactly 3 alive neighbors, click() it
 				if(neighbors[i][j] == 3) {
+					println("dead, will click")//debug
 					click(grid,i,j)
 				}
 			} else if (fill[i][j] == 1) {
 				//if the cell is alive and has neither 2 nor 3 alive neighbors, click() it
 				if(neighbors[i][j] != 2 && neighbors[i][j] != 3) {
+					println("alive, will click")//debug
 					click(grid,i,j)
 				}
 			}
