@@ -93,7 +93,7 @@ func countNeighbors(grid *fyne.Container) {
 					m := j+diff[b]
 
 					//if statement to check indexes are in-bound and indexes != [i,j]
-					if(n>=0 && n<=49 && m>=0 && m<=24 && ( n!=i || m!=j)) {
+					if(n>=0 && n<=49 && m>=0 && m<=49 && ( n!=i || m!=j)) {
 						if(fill[n][m] == 1) {
 							neighbors[i][j]++
 						}
