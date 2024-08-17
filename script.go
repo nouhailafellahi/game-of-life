@@ -17,6 +17,8 @@ import (
 //valye of 1 if colored
 var squares [50][25]*canvas.Rectangle
 var fill[50][25]int
+var neighbors[50][25]int
+
 
 //Struct and declaration of a clickable rectangle. Used as the background of grid
 type clickableRectangle struct {
@@ -45,12 +47,9 @@ func (r *clickableRectangle) Tapped(event *fyne.PointEvent) {
 
 
 
-
-
-
 //Methods
 func play(grid *fyne.Container) {
-
+	countNeighbors(grid)
 	
 }
 
@@ -63,12 +62,63 @@ func reset(grid *fyne.Container) {
 
 }
 
-func click(grid *fyne.Container, pos fyne.Position){
-	xPos := (int(math.Floor(float64(int(pos.X))/20)))
-	yPos := (int(math.Floor(float64(int(pos.Y))/20)))
+func initNeighbors() {
 	
-	println("Position clicked: ", xPos, yPos)//debug
+	//initialize array of neighbors
+	for i:=0;i<len(neighbors);i++{
+		for j:=0;j<len(neighbors[i]);j++{
+			neighbors[i][j] = 0
+		}
+	}
 
+}
+
+func countNeighbors(grid *fyne.Container) {
+	initNeighbors()
+	
+	//following loop counts the neighbors of each cell
+	//then decides wether to click() the cell or not
+
+	//run through every cell of squares[]
+	for i:=0;i<len(squares);i++ {
+		for j:=0;j<len(squares[i]);j++{
+
+			//count the neighbors for squares[i,j]
+			diff := [3]int{-1,0,1}
+			for a:=0;a<len(diff);a++{
+				for b:=0;b<len(diff);b++{
+					
+					//index (n,m) of neighbor
+					n := i+diff[a]
+					m := j+diff[b]
+
+					//if statement to check indexes are in-bound and indexes != [i,j]
+					if(n>=0 && n<=49 && m>=0 && m<=49 && ( n!=i || m!=j)) {
+						if(fill[n][m] == 1) {
+							neighbors[i][j]++
+						}
+					}
+				}
+			}
+
+			//decide wether to keep current status or click()
+			if(fill[i][j] == 0) {
+				//if the cell is dead and has exactly 3 alive neighbors, click() it
+				if(neighbors[i][j] == 3) {
+					click(grid,i,j)
+				}
+			} else if (fill[i][j] == 1) {
+				//if the cell is alive and has neither 2 nor 3 alive neighbors, click() it
+				if(neighbors[i][j] != 2 && neighbors[i][j] != 3) {
+					click(grid,i,j)
+				}
+			}
+		}
+	}
+			
+}
+
+func click(grid *fyne.Container, xPos int, yPos int){
 	if(fill[xPos][yPos] == 0) {
 		squares[xPos][yPos].FillColor = color.White
 		fill[xPos][yPos] = 1
@@ -76,8 +126,7 @@ func click(grid *fyne.Container, pos fyne.Position){
 		squares[xPos][yPos].FillColor = color.Transparent
 		fill[xPos][yPos] = 0
 	}
-	grid.Refresh()
-		
+	grid.Refresh()	
 }
 
 
@@ -101,6 +150,8 @@ func main() {
 			grid.Add(squares[i][j])
 		}
 	}
+
+	initNeighbors()
 
 	//draw grid lines
 	for i := 0; i < 51; i++ {
@@ -135,7 +186,10 @@ func main() {
 	//Create a clickable, transparent screen behind the grid
 	screen := newClickableRectangle()
 	screen.OnTapped = func(pos fyne.Position) {
-		click(grid, pos)
+		xPos := (int(math.Floor(float64(int(pos.X))/20)))
+		yPos := (int(math.Floor(float64(int(pos.Y))/20)))
+		
+		click(grid, xPos, yPos)
 	}
 	screen.Resize(fyne.NewSize(1000,500))
 	screen.rect.FillColor = color.RGBA{R:100,G:100,B:100,A:30}
