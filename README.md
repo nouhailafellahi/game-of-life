@@ -12,3 +12,6 @@ The buttons Play and Stop are two sides of the same button LOL.
 The Reset button can be callled whenever needed. If called while game is playing. 
 
 The Stop function will be called then all instance variable values and screen will be reset. If called after the Stop button is called, only the second part will happen.
+
+
+Depending on the initial combination of live cells, the program can generate up to 20,000 generations a second, without GUI updates. Around 1000 generations with GUI updates.
