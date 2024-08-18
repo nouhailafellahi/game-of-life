@@ -10,22 +10,22 @@ After a few evolutions of an initial cell formation, latest generation is often 
 **Example of round in Game of Life**
 
 ```diff 
-+Initial formation 
++ Initial formation 
 ```
 >![Generation 0 / Initial cell formation](./s0.png) 
 
 ```diff 
-+Initial formation 
+! 1st evolution 
 ```
 >![Generation 1](./s1.png)
 
 ```diff 
-+Initial formation 
++ 2nd evolution  
 ```
 >![Generation 2](./s2.png)
 
 ```diff 
-+Initial formation 
+! 3rd evolution 
 ```
 >![Generation 10](./s10.png)
 
