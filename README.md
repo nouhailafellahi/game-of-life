@@ -15,3 +15,5 @@ The Stop function will be called then all instance variable values and screen wi
 
 
 Depending on the initial combination of live cells, the program can generate up to 20,000 generations a second, without GUI updates. Around 1000 generations with GUI updates.
+
+![Generation 0/Initial cell formation](./s0.png)
