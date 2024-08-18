@@ -51,10 +51,8 @@ func (r *clickableRectangle) Tapped(event *fyne.PointEvent) {
 
 //Methods
 func play(grid *fyne.Container) {
-	
 	playing = true
-	for playing {
-		countNeighbors()
+	for playing && !countNeighbors() {
 		for i:=0;i<len(squares);i++ {
 			for j:=0;j<len(squares[i]);j++{
 
@@ -62,20 +60,19 @@ func play(grid *fyne.Container) {
 				if(fill[i][j] == 0) {
 					//if the cell is dead and has exactly 3 alive neighbors, click() it
 					if(neighbors[i][j] == 3) {
-						println("dead, will click")//debug
 						click(grid,i,j)
 					}
 				} else if (fill[i][j] == 1) {
 					//if the cell is alive and has neither 2 nor 3 alive neighbors, click() it
 					if(neighbors[i][j] != 2 && neighbors[i][j] != 3) {
-						println("alive, will click")//debug
 						click(grid,i,j)
 					}
 				}
 			}
 		}
-		time.Sleep(2*time.Second)
+		time.Sleep(1*time.Second)
 	}
+	playing = false
 
 	
 	
@@ -89,6 +86,11 @@ func stop(grid *fyne.Container) {
 
 func reset(grid *fyne.Container) {
 	stop(grid)
+	for i:=0;i<len(fill);i++{
+		for j:=0;j<len(fill[i]);j++{
+			//DEBUG
+		}
+	}
 
 }
 
@@ -103,8 +105,9 @@ func initNeighbors() {
 
 }
 
-func countNeighbors() {
+func countNeighbors() bool {
 	initNeighbors()
+	lastGen := true;
 	
 	//following loop counts the neighbors of each cell
 	//then decides wether to click() the cell or not
@@ -130,30 +133,34 @@ func countNeighbors() {
 					}
 				}
 			}
-			//println(neighbors[i][j])//debug
+			if neighbors[i][j] > 0 {
+				lastGen = false
+			}
+			//(neighbors[i][j])//debug
 		}
-	}
-			
-			
+	}		
+	return lastGen		
 }
 
 func click(grid *fyne.Container, xPos int, yPos int){
-	if(fill[xPos][yPos] == 0) {
-		squares[xPos][yPos].FillColor = color.White
-		fill[xPos][yPos] = 1
-	} else {
-		squares[xPos][yPos].FillColor = color.Transparent
-		fill[xPos][yPos] = 0
-	}
-	grid.Refresh()	
+	//if !playing {
+		if(fill[xPos][yPos] == 0) {
+			squares[xPos][yPos].FillColor = color.White
+			fill[xPos][yPos] = 1
+		} else {
+			squares[xPos][yPos].FillColor = color.Transparent
+			fill[xPos][yPos] = 0
+		}
+		grid.Refresh()
+	//}
+		
 }
 
 
 
 //Main
 func main() {
-	playing = true
-	println("Start build")//debug
+	playing = false
 	a := app.New()
 	w := a.NewWindow("Conway's Game of Life")
 	
@@ -222,9 +229,13 @@ func main() {
 
 	//Create and position Play button
 	playBtn := widget.NewButton("Play", func(){
-		if !playing {
-			play(grid)
-		}
+		//run independent from main()
+		go func() {
+			if !playing {
+				play(grid)
+			}
+		}()
+		
 	})
 	playBtn.Move(fyne.NewPos(300, 580))
 	playBtn.Resize(fyne.NewSize(150, 50))
@@ -235,7 +246,11 @@ func main() {
 
 	//Create and position Stop button
 	stopBtn := widget.NewButton("Stop", func(){
-		stop(grid)
+		//run independent of main()
+		go func() {
+			stop(grid)
+		}()
+		
 	} )
 	stopBtn.Move(fyne.NewPos(525, 580))
 	stopBtn.Resize(fyne.NewSize(150, 50))
@@ -246,13 +261,17 @@ func main() {
 
 	//Create and position Reset button
 	resetBtn := widget.NewButton("Reset", func(){
-		reset(grid)
+		//run independent from main()
+		go func(){
+			reset(grid)
+		}()
 	} )
 	resetBtn.Move(fyne.NewPos(750, 580))
 	resetBtn.Resize(fyne.NewSize(150, 50))
 	//Add button to window
 	content.Add(resetBtn)
 	
+	//Add content to window
 	w.SetContent(content)
 	w.Resize(fyne.NewSize(1200,670))
 
@@ -263,13 +282,7 @@ func main() {
 	}
 	w.SetIcon(icon)
 
-
-
-
-	go func() {
-		//run while show and running
-	}()
-
+	//Run app
 	w.ShowAndRun()	
 
 }
