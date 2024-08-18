@@ -1,19 +1,25 @@
 # game-of-life
 Conway's Game of Life in GoLang
 
-Once I am able to work the GUI for this program, it will have the following features: 
-	1. Two buttons: Play + Stop + Reset.
-	2. A clickable screen with many squares...? I do not know how to name it.
+Conway's Game of Life is a deterministic grid-based game where each cell in a grid can either be alive or dead. 
 
-The Play button will do the same thing whether the state of the program has just been reset or not.
-The Stop button will pause the operations of the program. Basically just freeeze it.
+The game evolves through discrete time steps, where a cell's state in the next step is determined by its eight neighbors: a live cell with 2 or 3 neighbors stays alive, while a dead cell with exactly 3 neighbors becomes alive. 
 
-The buttons Play and Stop are two sides of the same button LOL.
-The Reset button can be callled whenever needed. If called while game is playing. 
+After a few evolutions of an initial cell formation, latest generation is often completely unrecognizable from the original.
 
-The Stop function will be called then all instance variable values and screen will be reset. If called after the Stop button is called, only the second part will happen.
+Example of round in Game of Life
+
+Initial formation: 
+![Generation 0 / Initial cell formation](./s0.png) 
+
+1st evolution
+![Generation 1](./s1.png)
+
+2nd evolution
+![Generation 2](./s2.png)
+
+10th evolution
+![Generation 10](./s10.png)
 
 
-Depending on the initial combination of live cells, the program can generate up to 20,000 generations a second, without GUI updates. Around 1000 generations with GUI updates.
-
-![Generation 0/Initial cell formation](./s0.png)
+Depending on the initial combination of live cells, the program can generate up to 20,000 generations per second without GUI updates and around 1000 generations with GUI updates.
