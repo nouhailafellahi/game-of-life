@@ -5,19 +5,27 @@ The game evolves through discrete time steps, where a cell's state in the next s
 
 After a few evolutions of an initial cell formation, latest generation is often completely unrecognizable from the original.
 
-Depending on the initial combination of live cells, the program can generate up to 20,000 generations per second without GUI updates and around 1000 generations with GUI updates.
+>Depending on the initial combination of live cells, the program can generate up to 20,000 generations per second without GUI updates and around 1000 generations with GUI updates.
 
 **Example of round in Game of Life**
 
->Initial formation: 
+```diff 
++Initial formation 
+```
 >![Generation 0 / Initial cell formation](./s0.png) 
 
->1st evolution
+```diff 
++Initial formation 
+```
 >![Generation 1](./s1.png)
 
->2nd evolution
+```diff 
++Initial formation 
+```
 >![Generation 2](./s2.png)
 
->10th evolution
+```diff 
++Initial formation 
+```
 >![Generation 10](./s10.png)
 
