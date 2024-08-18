@@ -12,26 +12,26 @@ After a few evolutions of an initial cell formation, latest generation is often 
 ```diff 
 + Initial formation 
 ```
-![Generation 0 / Initial cell formation](./s0.png) 
+![Generation 0 / Initial cell formation](./evolutions/s0.png) 
 
 
 
 ```diff 
 + 1st evolution 
 ```
-![Generation 1](./s1.png)
+![Generation 1](./evolutions/s1.png)
 
 
 
 ```diff 
 + 2nd evolution  
 ```
-![Generation 2](./s2.png)
+![Generation 2](./evolutions/s2.png)
 
 
 
 ```diff 
-+ 3rd evolution 
++ 10th evolution 
 ```
-![Generation 10](./s10.png)
+![Generation 10](./evolutions/s10.png)
 
